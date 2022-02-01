@@ -1,0 +1,64 @@
+---
+title: "web analytics"
+author: "brian rochford"
+date: "12/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(wooldridge)
+library(stargazer)
+library(kableExtra)
+library(haven)
+library(ggplot2)
+library(dplyr)
+library(purrr)
+library(readxl)
+```
+
+
+```{r }
+my_data3 <- read_excel("/Users/brianrochford/Downloads/nftFormatFinal.xlsx")
+my_data3
+```
+```{r }
+modelz = lm((thirty_day_change)  ~ (compound_polarity_score), data = my_data3, na.action = na.omit)
+summary(modelz)
+```
+```{r}
+model_sent <- lm((thirty_day_change) ~ (sentiment_ratio), data = my_data3, na.action = na.omit)
+model_sent
+```
+#Outliers removed to adjust initial model
+```{r }
+no_outliers <- read_excel("/Users/brianrochford/Downloads/thirtyChangeOutliersremoved.xlsx")
+no_outliers
+```
+
+```{r }
+model_out = lm((thirty_day_change)  ~ (compound_polarity_score), data = no_outliers, na.action = na.omit)
+summary(model_out)
+```
+
+```{r }
+model_out_ratio = lm((thirty_day_change)  ~ (sentiment_ratio), data = no_outliers, na.action = na.omit)
+summary(model_out_ratio)
+```
+
+#Refined model 
+
+#thirty day volume on sentiment ratio model 
+```{r }
+model3 = lm((thirty_day_volume)  ~ (sentiment_ratio), data = my_data3, na.action = na.omit)
+summary(model3)
+```
+#thirty day sales on compound polarity score
+```{r }
+model_new <- lm((thirty_day_sales) ~ (compound_polarity_score), data = my_data3, na.action = na.omit)
+summary(model_new)
+```
